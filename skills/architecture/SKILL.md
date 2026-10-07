@@ -86,11 +86,12 @@ DESCOBRIR → LER → CONHECIDO → LACUNAS → PERGUNTAR → REGISTRAR → ALTE
 | `3-requirements` | RNFs/restrições sem métrica/fonte | `architecture-context`, depois `architecture-interview` se faltar item |
 | `4-proposal` | requisitos prontos, TO-BE ausente | `architecture-generate` (ou `architecture-api/data/infrastructure/devops/security` para parte) |
 | `5-validation` | proposta pronta, sem aprovação | apresentar ao usuário; `architecture-adr` para registrar aprovações |
-| `6-documentation` | aprovado, docs a consolidar | `architecture-generate` (consolidação), `architecture-gap-analysis`; publicação para o cliente (wiki limpa + 3 páginas padrão + deck): `architecture-publish`; documento formal em PDF (42010): `architecture-pdf` |
+| `6-documentation` | aprovado, docs a consolidar | `architecture-generate` (consolidação), `architecture-gap-analysis`; publicação para o cliente (wiki limpa + 3 páginas padrão): `architecture-publish`; deck/apresentação ao cliente: `architecture-presentation`; documento formal em PDF (42010): `architecture-pdf` |
 | `7-review` | docs prontos | `architecture-review` |
 | `8-evolution` | doc viva | `architecture-update` |
 | qualquer | escolha de tecnologia | `architecture-tech-evaluation` |
-| qualquer | publicar na wiki, documentação para o cliente, apresentação/versão resumida, gráficos radar | `architecture-publish` |
+| qualquer | publicar na wiki, documentação para o cliente, gráficos radar | `architecture-publish` |
+| qualquer | apresentação/deck de arquitetura, versão resumida, revisar apresentação | `architecture-presentation` |
 | qualquer | "gerar PDF da arquitetura", "documento de arquitetura de software", "documento 42010" | `architecture-pdf` (escopo: atual, proposta ou ambas; saída em `docs/arquitetura/`, fora da árvore fixa) |
 
 ## FLUXO COMPLETO ("Vamos construir a arquitetura inicial deste projeto")
@@ -104,7 +105,7 @@ Executar em ordem, atualizando `state.md` a cada etapa. **PARAR e aguardar o usu
 5. **validate + adr** — `architecture-adr`: com a aprovação registrada (data + resposta), promover ADRs a ACCEPTED com Evidence; os não aprovados ficam PROPOSED ou REJECTED. Itens PROPOSAL aprovados viram `[DECISION · ADR-NNN]`.
 6. **review** — `architecture-review`: revisão independente. ⏸ *Validação 5:* mostrar achados CRÍTICO/ALTO; usuário decide corrigir ou aceitar como risco (registrar).
 7. **gap-analysis** — `architecture-gap-analysis`: AS-IS × TO-BE → roadmap + dívida técnica. ⏸ *Validação final:* usuário revisa o roadmap.
-8. **publish** (quando o usuário pedir documentação para o cliente / ao consolidar a fase `6-documentation`) — `architecture-publish`: wiki limpa + 3 páginas padrão com radar + deck resumido; push só com pedido. Documento formal em PDF: `architecture-pdf`.
+8. **publish** (quando o usuário pedir documentação para o cliente / ao consolidar a fase `6-documentation`) — `architecture-publish`: wiki limpa + 3 páginas padrão com radar; deck ao cliente: `architecture-presentation` (revisão + produção); push só com pedido. Documento formal em PDF: `architecture-pdf`.
 9. Fechar: `state.md` com fase `8-evolution`, último commit revisado e próximos passos; atualizar `docs/architecture/README.md`.
 
 Se o usuário interromper, registrar o ponto exato em `state.md` ("Próximos passos") para retomada.

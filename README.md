@@ -20,7 +20,7 @@ DESCOBRIR → LER → CONHECIDO → LACUNAS → PERGUNTAR → REGISTRAR
 | Pasta | O que é |
 |---|---|
 | `agents/` | 7 subagentes: `architecture-discovery`, `application-architect`, `data-architect`, `platform-architect`, `security-privacy-architect`, `architecture-reviewer`, `architecture-documenter` |
-| `skills/` | 17 skills: `architecture` (entrada) e `architecture-{start,context,discover,interview,generate,api,data,infrastructure,devops,security,adr,tech-evaluation,review,gap-analysis,update,pdf}` |
+| `skills/` | 19 skills: `architecture` (entrada) e `architecture-{start,context,discover,interview,generate,api,data,infrastructure,devops,security,adr,tech-evaluation,review,gap-analysis,update,pdf,publish,presentation}` |
 | `skills/architecture/templates/` | 30 templates (memória, documentos, ADR, avaliação de tecnologia, diagramas C4 em Mermaid) e a pasta `architecture-document/` (template, CSS e gerador do PDF 42010) |
 | `docs/ANALISE.md` | análise crítica e desenho (divisão de responsabilidades, fluxo, memória, entrevista, critérios de conclusão) |
 | `docs/SPEC.md` | especificação usada para gerar os arquivos |
@@ -52,7 +52,13 @@ A skill `architecture-pdf` (subagente `architecture-documenter`) consolida `.arc
 bash ~/.claude/skills/architecture/templates/architecture-document/setup.sh
 ```
 
-Pré-requisitos do sistema: Python 3 com Pango (WeasyPrint), Node/npm, um Chromium já instalado (Playwright, Chrome ou Chromium; o script não baixa navegador) e `poppler-utils` (`pdfinfo`, `pdftoppm`). Guia de formato, sintaxe e opções em `skills/architecture/templates/architecture-document/README.md`. A publicação da wiki limpa e do deck para o cliente é outra skill (`architecture-publish`), mantida à parte.
+Pré-requisitos do sistema: Python 3 com Pango (WeasyPrint), Node/npm, um Chromium já instalado (Playwright, Chrome ou Chromium; o script não baixa navegador) e `poppler-utils` (`pdfinfo`, `pdftoppm`). Guia de formato, sintaxe e opções em `skills/architecture/templates/architecture-document/README.md`. A publicação da wiki limpa e do deck para o cliente são outras duas skills (`architecture-publish` e `architecture-presentation`), também neste repositório (seção abaixo).
+
+## Publicação para o cliente (wiki limpa e deck)
+
+- `architecture-publish` — gatilhos: "publicar arquitetura na wiki", "documentação para o cliente", "tecnologias avaliadas", "componentes", "banco de dados no padrão", "gráficos radar". Produz a wiki limpa do cliente (3 páginas padrão: Tecnologias-Avaliadas, Componentes, Banco-de-Dados, mais landing e páginas de Arquitetura) com gráficos radar em PNG, sem IDs, decisões, riscos ou nomes internos; verifica com `verify_wiki.py`. Commit na worktree da wiki; push só a pedido. Delega o deck à skill abaixo.
+- `architecture-presentation` — gatilhos: "apresentação de arquitetura", "deck para o cliente", "revisar apresentação", "slides da arquitetura". Duas fases: REVISÃO (`REVISAO.md` + `radar-data.json`, com classificação de cada afirmação) e PRODUÇÃO (até 20 slides em HTML 1920x1080, PDF e PPTX, em `docs/apresentacoes/<cliente-vN>/`); verifica com `verify_deck.py`.
+- Pré-requisitos do sistema: Python 3 com `venv` e `pip` (o `scripts/build.sh` cria o venv com `python-pptx` e `matplotlib` se não existir; `ARCH_DECK_VENV` aponta para um existente; nada é instalado globalmente), `google-chrome` no PATH (ou `CHROME=<binário>`) para gerar o PDF em modo headless e `poppler-utils` (`pdftoppm`, `pdfinfo`). Para o deck legado de `architecture-publish` (`build_deck.py --render`) também é preciso LibreOffice (`soffice`). A wiki exige acesso git ao repositório dela.
 
 ## Saída no projeto
 

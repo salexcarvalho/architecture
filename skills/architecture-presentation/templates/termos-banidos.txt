@@ -1,0 +1,61 @@
+# Termos banidos em apresentações de arquitetura (regex, sem distinção de maiúsculas :: motivo).
+# Uma regra por linha. O verify_deck.py aplica a deck.html, notes.json e notas do PPTX.
+# Acrescente termos do projeto com --termos arquivo.txt ou --deny "termo".
+
+# --- rótulos e jargão de marketing ---
+monólito\s+modular           :: não rotular; descrever camadas, fluxo e escala (regra de caracterização)
+\bmonolito\s+modular         :: idem (sem acento)
+\brobust[oa]s?\b             :: adjetivo sem medida; dizer o requisito atendido
+\bmoderna?s?\b               :: adjetivo vazio; dizer a propriedade técnica
+de\s+ponta                   :: marketing
+estado\s+da\s+arte           :: marketing
+state[-\s]of[-\s]the[-\s]art :: marketing
+cutting[-\s]edge             :: marketing
+game[-\s]?changer            :: marketing
+disruptiv                    :: marketing
+revolucion                   :: marketing
+turbin                       :: marketing
+bala\s+de\s+prata            :: promessa absoluta
+silver\s+bullet              :: promessa absoluta
+melhor\s+do\s+mercado        :: comparação sem evidência
+\bincrível|\bincriveis\b     :: tom informal
+\bsimplesmente\b             :: tom informal / minimiza complexidade
+\bobviamente\b               :: tom informal
+\bclaramente\b               :: tom informal
+sem\s+d[uú]vida              :: certeza sem evidência
+\bmágic[oa]                  :: tom informal
+\bturbo\b                    :: tom informal
+\bbasicamente\b              :: tom informal
+\bbacana\b                  :: tom informal
+
+# --- promessas absolutas (exigem número, meta e ensaio) ---
+à\s+prova\s+de\s+falhas      :: promessa absoluta
+sem\s+(?:nenhum\s+)?risco\b  :: não ocultar riscos
+zero\s+downtime              :: promessa absoluta sem evidência
+100\s*%\s*(?:de\s+)?dispon   :: promessa absoluta
+infinitamente|ilimitad[oa]   :: escala sem limite não existe; declarar o limite
+a\s+qualquer\s+instante      :: recuperação sem prova (dizer janela e ensaio)
+garant(?:e|imos|ido)\s+(?:a\s+)?(?:segurança|disponibilidade|desempenho) :: garantia sem evidência
+
+# --- negativas sem evidência / "experiência da equipe" ---
+equipe\s+sem\s+experi        :: nunca pontuar baixo sem evidência; usar precedente na organização ou NOT EVALUATED
+time\s+sem\s+experi          :: idem
+falta\s+de\s+experi          :: idem
+inexperient                  :: idem
+n[aã]o\s+conhece(?:m)?\b     :: negativa sem evidência
+curva\s+de\s+aprendizado\s+(?:alta|grande|íngreme) :: negativa sem evidência (dizer fato mensurável)
+
+# --- fontes, ferramentas e atribuição ---
+\bcla[u]de\b                 :: sem menção à ferramenta de IA
+anthrop[i]c                   :: sem menção à ferramenta de IA
+co-authored                  :: sem atribuição
+generated\s+with             :: sem atribuição
+gerado\s+(?:por|com)\s+(?:ia|inteligência|cla[u]de) :: sem atribuição
+\bchat[g]pt\b|\bcopil[o]t\b    :: sem menção à ferramenta de IA
+
+# --- rascunho e meta-texto ---
+\bPROPOSAL\b|\bASSUMPTION\b|\bOPEN QUESTION\b|\bPROPOSED\b|\bACCEPTED\b|\bSUPERSEDED\b :: rótulos internos de classificação/ADR não vão para o slide
+\bFACT\b|\bDECISION\b        :: rótulo interno de classificação não vai para o slide
+\[KNOWN|\[DECISION|\[PROPOSAL|\[OPEN :: marcadores internos da memória
+próximos?\s+slides?\s+mostr  :: meta-texto; o título já afirma
+neste\s+slide                :: meta-texto

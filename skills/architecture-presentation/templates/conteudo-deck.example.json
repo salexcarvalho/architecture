@@ -1,0 +1,684 @@
+{
+  "meta": {
+    "sistema": "Sistema Exemplo",
+    "cliente": "Cliente Exemplo",
+    "rodape": "Sistema Exemplo · Arquitetura",
+    "rodape_capa": "Arquitetura · Equipe de Arquitetura · mês de 2027",
+    "titulo_html": "Sistema Exemplo · Arquitetura · Apresentação ao cliente",
+    "autor": "Equipe de Arquitetura",
+    "arquivo_base": "Sistema-Exemplo-Arquitetura-Cliente-v1",
+    "radar_prefix": "radar"
+  },
+  "slides": [
+    {
+      "type": "cover",
+      "kicker": "SISTEMA EXEMPLO · APRESENTAÇÃO AO CLIENTE",
+      "title": "Arquitetura do Sistema Exemplo",
+      "subtitle": "O que já está decidido, o que está em prova e o que precisamos decidir juntos com o cliente.",
+      "blocks": [
+        {"label": "Decidido", "text": "12 decisões de arquitetura aprovadas, 2 delas com condições."},
+        {"label": "Em prova", "text": "Fila de jobs, recuperação de desastres e importação de planilhas."},
+        {"label": "Precisa do cliente", "text": "Seis decisões do cliente para destravar o MVP."}
+      ],
+      "footer": "Arquitetura · Equipe de Arquitetura · mês de 2027",
+      "fontes_internas": "ADR aprovados; fatos de contexto (não renderizado)"
+    },
+    {
+      "type": "kpis",
+      "kicker": "CONTEXTO",
+      "title": "O fechamento mensal precisa de base única e rastreável",
+      "side": {
+        "mini": "DORES REGISTRADAS NO LEVANTAMENTO",
+        "title": "Planilhas, dependência de quem as mantém e falta de integração",
+        "text": "O sistema reúne o fechamento mensal em uma aplicação web versionada por período."
+      },
+      "items": [
+        {"value": "~50", "title": "usuários internos", "sub": "pico nos dias 1 a 15"},
+        {"value": "15", "title": "dia limite, todo mês", "sub": "fechado e enviado ao sistema federal"},
+        {"value": "60", "title": "histórias no mapa", "sub": "20 homologadas, 5 prontas"},
+        {"value": "70", "title": "tabelas no modelo atual", "sub": "ponto de partida do novo banco"}
+      ]
+    },
+    {
+      "type": "diagram",
+      "kicker": "ARQUITETURA",
+      "title": "Aplicação sem estado na frente, banco desacoplado atrás",
+      "boxes": [
+        {"x": 128, "y": 510, "w": 230, "h": 100, "title": "Usuário", "sub": "navegador (SPA)"},
+        {"x": 420, "y": 420, "w": 290, "h": 280, "title": "Load balancer", "sub": "TLS e limite de taxa"},
+        {
+          "x": 800,
+          "y": 395,
+          "w": 320,
+          "h": 100,
+          "title": "App/API 1",
+          "sub": "hoje: 1 instância por ambiente",
+          "kind": "app"
+        },
+        {"x": 800, "y": 510, "w": 320, "h": 100, "title": "App/API 2", "sub": "capacidade do desenho", "kind": "evo"},
+        {"x": 800, "y": 625, "w": 320, "h": 100, "title": "App/API N", "sub": "API sem estado", "kind": "evo"},
+        {
+          "x": 1290,
+          "y": 470,
+          "w": 330,
+          "h": 160,
+          "title": "Banco de dados",
+          "sub": "dados persistentes, em rede privada"
+        },
+        {"x": 800, "y": 275, "w": 320, "h": 70, "title": "Provedor de identidade", "kind": "shared"},
+        {"x": 1290, "y": 275, "w": 330, "h": 70, "title": "Monitoração central", "kind": "shared"},
+        {
+          "x": 470,
+          "y": 790,
+          "w": 270,
+          "h": 100,
+          "title": "Armazenamento",
+          "sub": "arquivos e backups",
+          "kind": "shared"
+        },
+        {"x": 800, "y": 790, "w": 240, "h": 100, "title": "Fila e cache", "sub": "jobs e permissões"},
+        {"x": 1110, "y": 790, "w": 320, "h": 100, "title": "Worker", "sub": "réplica única hoje", "kind": "app"},
+        {
+          "x": 1500,
+          "y": 790,
+          "w": 292,
+          "h": 100,
+          "title": "API de terceiros",
+          "sub": "dados externos",
+          "kind": "shared"
+        }
+      ],
+      "arrows": [
+        {"pts": [[358, 560], [420, 560]]},
+        {"pts": [[710, 470], [755, 470], [755, 445], [800, 445]]},
+        {"pts": [[710, 560], [800, 560]], "dashed": true},
+        {"pts": [[710, 650], [755, 650], [755, 675], [800, 675]], "dashed": true},
+        {"pts": [[1120, 445], [1215, 445], [1215, 550], [1290, 550]]},
+        {"pts": [[1120, 550], [1290, 550]], "dashed": true},
+        {"pts": [[1120, 675], [1215, 675], [1215, 550], [1290, 550]], "dashed": true},
+        {"pts": [[243, 510], [243, 310], [800, 310]], "dashed": true, "label": "login (PKCE)", "lx": 520, "ly": 310},
+        {"pts": [[960, 395], [960, 345]], "dashed": true, "label": "valida o token", "lx": 1060, "ly": 370},
+        {"pts": [[1120, 420], [1455, 420], [1455, 345]], "dashed": true, "label": "telemetria", "lx": 1290, "ly": 420},
+        {"pts": [[960, 725], [960, 790]], "label": "jobs", "lx": 990, "ly": 758},
+        {"pts": [[1040, 840], [1110, 840]]},
+        {"pts": [[1400, 790], [1400, 630]], "label": "grava", "lx": 1360, "ly": 712},
+        {"pts": [[1430, 840], [1500, 840]], "dashed": true},
+        {
+          "pts": [[880, 725], [880, 758], [605, 758], [605, 790]],
+          "dashed": true,
+          "label": "arquivos",
+          "lx": 740,
+          "ly": 758
+        }
+      ],
+      "legend": true,
+      "notes": [
+        {"x": 1425, "y": 645, "w": 370, "text": "Escala vertical do banco; alta disponibilidade no slide 15."},
+        {
+          "x": 128,
+          "y": 908,
+          "text": "Hoje há 1 instância por ambiente. Várias instâncias são capacidade do desenho: a API não guarda estado."
+        }
+      ]
+    },
+    {
+      "type": "cards",
+      "kicker": "CARACTERÍSTICAS",
+      "title": "Cada camada evolui e escala no seu ritmo",
+      "bg": "alt",
+      "h": 390,
+      "items": [
+        {"seal": "dec", "title": "Sem estado", "text": "Sem sessão, arquivo ou trava local."},
+        {"seal": "capac", "title": "Várias instâncias", "text": "API em N instâncias atrás do balanceador."},
+        {"seal": "capac", "title": "Escala por camada", "text": "Aplicação em N réplicas; VM e banco na vertical."},
+        {"seal": "dec", "title": "Banco desacoplado", "text": "Serviço gerenciado fora da VM, em rede privada."},
+        {
+          "seal": "dec",
+          "title": "Evolução independente",
+          "text": "SPA, API, worker, banco e fila em ciclos próprios."
+        }
+      ],
+      "band": "Um módulo só acessa as tabelas de outro pelo serviço exportado; o pipeline verifica a regra.",
+      "note": "Decisão: aprovada. Capacidade: possível pelo desenho, sem implantação hoje."
+    },
+    {
+      "type": "flow",
+      "kicker": "FLUXO · CICLO MENSAL",
+      "title": "O período percorre seis estados e só fecha por ação manual",
+      "lanes": [
+        {
+          "label": "ESTADOS DO PERÍODO",
+          "steps": [
+            {"title": "Aberto", "sub": "copia o anterior fechado", "tag": "Operador", "tag_tone": "op"},
+            {"title": "Importado", "sub": "referências carregadas", "tag": "Worker", "tag_tone": "wk"},
+            {"title": "Vinculado", "sub": "itens na configuração", "tag": "Operador", "tag_tone": "op"},
+            {"title": "Calculado", "sub": "regra plugável", "tag": "Worker", "tag_tone": "wk"},
+            {"title": "Validado", "sub": "consistência conferida", "tag": "Worker", "tag_tone": "wk"},
+            {"title": "Fechado", "sub": "imutável", "kind": "app", "tag": "Operador", "tag_tone": "op"}
+          ],
+          "brackets": [
+            {"from": 0, "to": 1, "text": "Referências recarregáveis até Importado"},
+            {"from": 3, "to": 4, "text": "Regra de cálculo: a definir com o cliente", "dashed": true},
+            {"from": 5, "to": 5, "text": "Fechar exige MFA"}
+          ]
+        },
+        {
+          "label": "COMO CADA PASSO RODA, SEM TRAVAR A TELA",
+          "steps": [
+            {"title": "Operador aciona", "sub": "pedido na tela"},
+            {"title": "API responde 202", "sub": "registra o pedido", "kind": "app"},
+            {"title": "Fila", "sub": "job enfileirado"},
+            {"title": "Worker executa", "sub": "trava e confere o estado", "kind": "app"},
+            {"title": "Tela acompanha", "sub": "consulta o andamento"}
+          ]
+        }
+      ],
+      "foot_cards": [
+        {"text": "Fechar é ação manual, com permissão específica. Prazo: dia 15.", "dark": true},
+        {"text": "**Fechado é imutável.** Reabertura: decisão pendente do cliente."}
+      ]
+    },
+    {
+      "type": "diagram",
+      "kicker": "FLUXO · CARGA DE REFERÊNCIAS",
+      "title": "Dados externos viram snapshot versionado por período",
+      "bg": "alt",
+      "boxes": [
+        {"x": 128, "y": 285, "w": 332, "h": 110, "title": "Operador do sistema", "sub": "pede a carga de um conjunto"},
+        {
+          "x": 572,
+          "y": 285,
+          "w": 332,
+          "h": 110,
+          "title": "API",
+          "sub": "registra o pedido e responde 202",
+          "kind": "app"
+        },
+        {"x": 1016, "y": 285, "w": 332, "h": 110, "title": "Fila", "sub": "jobs pendentes"},
+        {"x": 1460, "y": 285, "w": 332, "h": 110, "title": "Worker", "sub": "executa a carga", "kind": "app"},
+        {"x": 128, "y": 490, "w": 332, "h": 120, "title": "Telas do sistema", "sub": "leem o snapshot gravado"},
+        {
+          "x": 572,
+          "y": 490,
+          "w": 332,
+          "h": 120,
+          "title": "Banco de dados",
+          "sub": "snapshot com hash e origem, mais auditoria"
+        },
+        {
+          "x": 1016,
+          "y": 490,
+          "w": 332,
+          "h": 120,
+          "title": "API de terceiros",
+          "sub": "fonte única dos dados externos",
+          "kind": "shared"
+        },
+        {
+          "x": 1460,
+          "y": 490,
+          "w": 332,
+          "h": 120,
+          "title": "Cliente HTTP",
+          "sub": "nova tentativa só em leitura e disjuntor"
+        }
+      ],
+      "arrows": [
+        {"pts": [[460, 340], [572, 340]]},
+        {"pts": [[904, 340], [1016, 340]], "label": "enfileira", "lx": 960, "ly": 308},
+        {"pts": [[1348, 340], [1460, 340]], "label": "entrega", "lx": 1404, "ly": 308},
+        {"pts": [[1710, 395], [1710, 490]], "label": "lê as páginas", "lx": 1710, "ly": 443},
+        {"pts": [[1460, 550], [1348, 550]], "dashed": true, "label": "GET", "lx": 1404, "ly": 518},
+        {
+          "pts": [[1530, 395], [1530, 445], [738, 445], [738, 490]],
+          "label": "grava em uma transação",
+          "lx": 1170,
+          "ly": 445
+        },
+        {"pts": [[572, 550], [460, 550]], "dashed": true, "label": "lê", "lx": 516, "ly": 518}
+      ],
+      "deps": [{"x": 1016, "y": 628, "w": 332, "text": "Cobertura completa prevista até 30/06/2027"}],
+      "cards": [
+        {
+          "x": 128,
+          "y": 712,
+          "w": 528,
+          "h": 205,
+          "title": "Fonte fora do ar",
+          "text": "Falha rápida. As telas seguem lendo o último snapshot."
+        },
+        {
+          "x": 696,
+          "y": 712,
+          "w": 528,
+          "h": 205,
+          "title": "Período não publicado",
+          "text": "Sem nova tentativa: a carga falha e fica registrada."
+        },
+        {
+          "x": 1264,
+          "y": 712,
+          "w": 528,
+          "h": 205,
+          "title": "Carga válida",
+          "text": "Confere o hash e grava snapshot e auditoria em uma só transação."
+        }
+      ]
+    },
+    {
+      "type": "flow",
+      "kicker": "FLUXO · ACESSO E USUÁRIOS",
+      "title": "O provedor identifica e a aplicação autoriza cada acesso",
+      "lanes": [
+        {
+          "label": "LOGIN E ACESSO",
+          "steps": [
+            {"num": "1", "title": "Abre o sistema", "sub": "vai ao login do provedor"},
+            {"num": "2", "title": "Login no provedor", "sub": "PKCE e MFA nos perfis críticos", "kind": "shared"},
+            {"num": "3", "title": "Token volta", "sub": "curto; só identifica"},
+            {"num": "4", "title": "API valida o token", "sub": "inválido: 401", "kind": "app"},
+            {"num": "5", "title": "Aplicação autoriza", "sub": "perfil do cache ou do banco; sem permissão: 403"}
+          ]
+        },
+        {
+          "label": "CADASTRO DE USUÁRIO, ASSÍNCRONO",
+          "steps": [
+            {"num": "1", "title": "Administrador cadastra", "sub": "usuário e perfis"},
+            {"num": "2", "title": "API grava o pedido", "sub": "usuário Pendente; resposta 202", "kind": "app"},
+            {"num": "3", "title": "Worker executa o job", "sub": "único a usar a API administrativa", "kind": "app"},
+            {"num": "4", "title": "Provedor cria o usuário", "sub": "fora do ar: tenta de novo", "kind": "shared"},
+            {"num": "5", "title": "Ativo ou Falha", "sub": "o reconciliador refaz o que falhou"}
+          ]
+        }
+      ],
+      "band": "MFA para administradores e para quem fecha o período. Perfis ficam no banco da aplicação, nunca no token."
+    },
+    {
+      "type": "stack",
+      "kicker": "STACK",
+      "title": "Stack avaliada por critérios e já padrão na organização",
+      "rows": [
+        {"camada": "API", "escolha": "Linguagem X + framework Y", "precedente": "7 projetos"},
+        {"camada": "ORM e migrations", "escolha": "ORM Z + migrations", "precedente": "4 repositórios"},
+        {
+          "slug": "motor-de-banco",
+          "camada": "Banco: motor",
+          "escolha": "Motor A",
+          "precedente": "mais de 10 projetos"
+        },
+        {
+          "slug": "hospedagem-do-banco",
+          "camada": "Banco: hospedagem",
+          "escolha": "Serviço gerenciado",
+          "precedente": "2 projetos gerenciados"
+        },
+        {
+          "slug": "filas-e-jobs",
+          "camada": "Jobs e agendamento",
+          "escolha": "Fila A + broker",
+          "precedente": "adoção planejada"
+        },
+        {
+          "slug": "autenticacao",
+          "camada": "Autenticação",
+          "escolha": "Provedor do cliente",
+          "precedente": "3 projetos"
+        },
+        {"slug": "autorizacao", "camada": "Autorização", "escolha": "Perfis no banco", "precedente": "5 a 9 projetos"},
+        {"camada": "Interface", "escolha": "Framework de SPA", "precedente": "4 repositórios"},
+        {"camada": "Observabilidade", "escolha": "OpenTelemetry + monitoração central", "precedente": "10 projetos"},
+        {"camada": "Arquivos", "escolha": "Armazenamento de objetos", "precedente": "padrão do cliente"}
+      ],
+      "foot": "n/a: camada sem comparativo formal ou critério sem evidência, fora da média. Precedente: peça menos frequente em stacks compostas."
+    },
+    {
+      "type": "radar",
+      "kicker": "BANCO DE DADOS · MOTOR",
+      "title": "O motor de banco atende ao modelo relacional versionado",
+      "slug": "motor-de-banco",
+      "bg": "alt",
+      "why": [
+        "Migrations transacionais e chaves compostas sustentam o período imutável.",
+        "Vigência por intervalo e partição com chave composta são recursos nativos.",
+        "Mesmo motor dos serviços vizinhos, com especialistas na organização."
+      ],
+      "strip": {
+        "label": "O que pesa a favor",
+        "items": [
+          "Integridade transacional",
+          "Vigência por intervalo",
+          "Partição com chave composta",
+          "Especialistas no motor"
+        ],
+        "chips": true,
+        "y": 866
+      }
+    },
+    {
+      "type": "radar",
+      "kicker": "BANCO DE DADOS · HOSPEDAGEM",
+      "title": "Banco gerenciado aprovado; container como alternativa",
+      "slug": "hospedagem-do-banco",
+      "head": "Hospedagem",
+      "why": [
+        "Banco fora da VM da aplicação: ciclo de vida e falha independentes.",
+        "Recuperação e atualização do motor ficam com o provedor.",
+        "Rede privada, conexão com verificação completa e papéis por ambiente."
+      ],
+      "strip": {
+        "label": "O que o gerenciado exige",
+        "items": ["Rede privada", "Papéis por ambiente", "Ensaio de recuperação", "Atualização antes do fim do suporte"],
+        "chips": true,
+        "y": 866
+      }
+    },
+    {
+      "type": "cards",
+      "kicker": "MODELO DE DADOS",
+      "title": "Cada registro carrega o seu período e o fechado é imutável",
+      "bg": "alt",
+      "h": 240,
+      "items": [
+        {"title": "Atemporal", "text": "ativa ou desativa", "seal": "prop"},
+        {"title": "Vigência", "text": "período inicial e final"},
+        {"title": "Por período", "text": "copiada ao abrir; imutável ao fechar"},
+        {"title": "Snapshot", "text": "dado externo; imutável após importado"}
+      ],
+      "strip": {
+        "label": "Três camadas protegem o período fechado",
+        "lw": 330,
+        "items": ["Permissões do banco", "Validação na aplicação", "Trigger mínimo", "Período fechado"],
+        "hi": "Período fechado"
+      },
+      "band": "Auditoria só de inserção, sem expurgo, com o autor de cada ação. Retenção definida com o cliente.",
+      "note": "Modelagem em proposta: classes de tabela a validar com o cliente."
+    },
+    {
+      "type": "radar",
+      "kicker": "JOBS E AGENDAMENTO",
+      "title": "Jobs longos saem da requisição e rodam em fila dedicada",
+      "slug": "filas-e-jobs",
+      "why": [
+        "Cargas e fechamento em lote saem da requisição, com nova tentativa e reentrega.",
+        "O cache já existente também serve de broker: um serviço a menos.",
+        "Mesmo ecossistema de linguagem da API."
+      ],
+      "strip": {
+        "label": "Prova de conceito na fundação",
+        "lw": 330,
+        "items": ["Job real", "Falha induzida", "Reinício", "Runbook"],
+        "hi": "Runbook",
+        "extra_dash": "Contingência: Fila B",
+        "y": 866
+      }
+    },
+    {
+      "type": "cards",
+      "kicker": "SEGURANÇA",
+      "title": "Segurança em seis controles, cada um com seu papel",
+      "items": [
+        {"num": "01", "title": "RBAC", "text": "Perfis no banco, nunca no token.", "seal": "dec"},
+        {"num": "02", "title": "Autenticação", "text": "Provedor do cliente, PKCE e MFA.", "seal": "dec"},
+        {"num": "03", "title": "Autorização", "text": "Negação por padrão em toda rota.", "seal": "dec"},
+        {"num": "04", "title": "Segurança da aplicação", "text": "TLS, limite de taxa e segredos.", "seal": "dec"},
+        {"num": "05", "title": "Segurança do banco", "text": "Rede privada e três papéis de acesso.", "seal": "dec"},
+        {"num": "06", "title": "Auditoria", "text": "Trilha só de inserção, sem expurgo.", "seal": "prop"}
+      ],
+      "h": 560,
+      "note": "Dados pessoais só de usuários do sistema. Matriz de perfis: proposta, a validar."
+    },
+    {
+      "type": "radar",
+      "kicker": "IDENTIDADE E ACESSO",
+      "title": "Autenticação no provedor e autorização por perfis no banco",
+      "bg": "alt",
+      "slugs": ["autenticacao", "autorizacao"],
+      "heads": ["Autenticação", "Autorização"],
+      "why": [
+        [
+          "Login único já operado pelo cliente; sem senha no sistema.",
+          "MFA para administradores e para quem fecha o período."
+        ],
+        [
+          "Perfis e escopo no banco, editáveis, com negação por padrão.",
+          "Capacidade interna declarada; matriz de perfis a validar."
+        ]
+      ]
+    },
+    {
+      "type": "matrix-hoje-evolucao",
+      "kicker": "DISPONIBILIDADE E RECUPERAÇÃO",
+      "title": "Escalar, resistir, manter no ar e recuperar diferem",
+      "kpis": [
+        {"value": "99,5%", "label": "dias úteis,\\n8h às 18h"},
+        {"value": "15 min", "label": "RPO: perda\\nmáxima de dados"},
+        {"value": "4 h", "label": "RTO: tempo\\npara restaurar"}
+      ],
+      "columns": [
+        {
+          "title": "Escalabilidade",
+          "hoje": "API sem estado; 1 instância por ambiente; cresce na vertical primeiro.",
+          "evolucao": "N réplicas da API."
+        },
+        {
+          "title": "Resiliência",
+          "hoje": "Fila, provedor ou API externa fora: o sistema degrada e segue.",
+          "evolucao": "Alertas do worker."
+        },
+        {
+          "title": "Alta disponibilidade",
+          "hoje": "Meta de 99,5% em dias úteis, 8h às 18h, com 1 VM por ambiente.",
+          "evolucao": "HA entre zonas e réplicas de leitura."
+        },
+        {
+          "title": "Recuperação de desastres",
+          "hoje": "Recuperação a um ponto no tempo, cópias imutáveis e ensaio antes da produção.",
+          "evolucao": "Backup geo-redundante."
+        }
+      ],
+      "notes": [
+        "RTO é meta aprovada: o ensaio de recuperação a comprova antes da homologação do MVP.",
+        "Hoje: decisão aprovada. Evolução: caminho previsto, ainda sem decisão."
+      ]
+    },
+    {
+      "type": "diagram",
+      "kicker": "AMBIENTES E ENTREGA",
+      "title": "Quatro ambientes, promoção por PR e deploy por tag",
+      "bg": "alt",
+      "groups": [{"x": 128, "y": 290, "w": 1020, "h": 300, "label": "UMA VM POR AMBIENTE"}],
+      "boxes": [
+        {"x": 150, "y": 360, "w": 168, "h": 150, "title": "Proxy", "sub": "borda", "extra": "sm"},
+        {"x": 336, "y": 360, "w": 150, "h": 150, "title": "SPA", "sub": "front-end", "extra": "sm"},
+        {"x": 504, "y": 360, "w": 150, "h": 150, "title": "API", "sub": "back-end", "kind": "app", "extra": "sm"},
+        {"x": 672, "y": 360, "w": 180, "h": 150, "title": "Worker", "sub": "jobs", "kind": "app", "extra": "sm"},
+        {"x": 870, "y": 360, "w": 150, "h": 150, "title": "Fila", "sub": "cache", "extra": "sm"},
+        {
+          "x": 1290,
+          "y": 290,
+          "w": 502,
+          "h": 100,
+          "title": "Banco de dados",
+          "sub": "serviço gerenciado, em rede privada",
+          "extra": "sm"
+        },
+        {
+          "x": 1290,
+          "y": 410,
+          "w": 502,
+          "h": 80,
+          "title": "Armazenamento",
+          "sub": "arquivos e backups",
+          "kind": "shared",
+          "extra": "sm"
+        },
+        {
+          "x": 1290,
+          "y": 510,
+          "w": 502,
+          "h": 80,
+          "title": "Agente do pipeline",
+          "sub": "dentro da rede privada",
+          "kind": "shared",
+          "extra": "sm"
+        }
+      ],
+      "arrows": [
+        {"pts": [[1148, 340], [1290, 340]], "label": "SQL", "lx": 1219, "ly": 340},
+        {"pts": [[1148, 450], [1290, 450]], "dashed": true, "label": "arquivos", "lx": 1219, "ly": 450},
+        {"pts": [[1290, 550], [1148, 550]], "dashed": true, "label": "migrations", "lx": 1219, "ly": 550}
+      ],
+      "minis": [
+        {"text": "PROMOÇÃO, SEMPRE POR PULL REQUEST", "x": 128, "y": 624},
+        {"text": "DEPLOY POR TAG DE AMBIENTE", "x": 128, "y": 750}
+      ],
+      "strips": [
+        {"items": ["feature", "develop", "staging", "homolog", "production"], "hi": "production", "x": 128, "y": 660},
+        {"items": ["prepare", "build", "migrate", "deploy", "smoke"], "hi": "migrate", "x": 128, "y": 786}
+      ],
+      "cards": [
+        {
+          "x": 1200,
+          "y": 620,
+          "w": 592,
+          "h": 250,
+          "title": "Os quatro ambientes",
+          "text": "**develop** integração da equipe\\n**staging** QA e testes ponta a ponta\\n**homolog** aceite do cliente, dados reais\\n**production** uso real, cerca de 50 usuários"
+        }
+      ],
+      "notes": [
+        {
+          "x": 128,
+          "y": 895,
+          "text": "Cada ambiente tem VM própria, banco isolado (database e papéis próprios) e realm próprio no provedor de identidade. As migrations rodam antes do código novo."
+        }
+      ]
+    },
+    {
+      "type": "timeline",
+      "kicker": "MARCOS",
+      "title": "O MVP chega em seis meses e a entrega final em um ano",
+      "items": [
+        {
+          "date": "01–15/03/2027",
+          "title": "Refinamento com o cliente",
+          "text": "Medição da base atual, aceite do MVP e matriz de perfis."
+        },
+        {
+          "date": "30/06/2027",
+          "title": "API de terceiros: cobertura completa",
+          "text": "Previsto; base das cargas do MVP.",
+          "dep": true
+        },
+        {
+          "date": "31/08/2027",
+          "title": "Fim do desenvolvimento do MVP",
+          "text": "Usuários, cargas, configuração e programação."
+        },
+        {"date": "09/2027", "title": "Homologação do MVP", "text": "Aceite pelo cliente, de 01 a 15 do mês."},
+        {"date": "12/2027", "title": "Incremento 1", "text": "Cálculo, validação e fechamento."},
+        {"date": "03/2028", "title": "Incremento 2", "text": "Exportações, comparações e relatórios."},
+        {"date": "06/2028", "title": "Incremento 3", "text": "Série histórica e automação da carga mensal."}
+      ],
+      "callout": "Cada incremento termina com homologação do cliente. Datas e escopo seguem sujeitos ao refinamento."
+    },
+    {
+      "type": "risks",
+      "kicker": "RISCOS",
+      "title": "Os riscos reais têm mitigação e caminho de evolução",
+      "rows": [
+        [
+          "API de terceiros ainda não está em produção nem cobre todos os dados",
+          "Atraso nas cargas do MVP",
+          "Marcos de evolução; hash local como alternativa",
+          "Cobertura por etapas até a produção estável"
+        ],
+        [
+          "Regra de cálculo do fechamento indefinida com o cliente",
+          "MVP sem consolidado conferido para o aceite",
+          "Critério de aceite até 15/03/2027; regra plugável",
+          "Regra completa antes do Incremento 1"
+        ],
+        [
+          "Extração do banco atual depende do cliente",
+          "Migração parcial; volume sem medição",
+          "Pedido de medição e amostras até 15/03/2027",
+          "Teste de carga em homologação"
+        ],
+        [
+          "Fila de jobs sem uso prévio nos projetos da organização",
+          "Curva de operação; broker de nó único",
+          "Prova de conceito, runbook, persistência e reconciliador",
+          "Contingência com fila alternativa"
+        ],
+        [
+          "1 VM por ambiente e banco sem HA entre zonas, frente a 99,5% e RTO de 4 h",
+          "Um incidente longo consome o orçamento mensal",
+          "Script de reprovisionamento, ensaio de recuperação, deploys congelados nos dias 1 a 15",
+          "HA entre zonas e réplicas de leitura"
+        ],
+        [
+          "Importação de planilhas legadas em Linux sem solução comprovada",
+          "Exportação ao sistema federal no Incremento 2",
+          "Teste com amostras reais antes do Incremento 2",
+          "Biblioteca a definir conforme o teste"
+        ]
+      ],
+      "foot": "Também acompanhados: fim do suporte padrão do motor do banco, validação do fluxo de identidade e responsável e janela de manutenção a nomear."
+    },
+    {
+      "type": "asks",
+      "kicker": "PRÓXIMOS PASSOS · DECISÕES DO CLIENTE",
+      "title": "Seis decisões do cliente destravam o MVP",
+      "rows": [
+        [
+          "Regra de cálculo do fechamento",
+          "Definir o consolidado conferido do aceite e a regra completa",
+          "Área de negócio",
+          "Aceite: 15/03/2027. Regra: antes do Incremento 1"
+        ],
+        [
+          "Extração do banco atual",
+          "Medir o volume e entregar amostras dos arquivos",
+          "Área de TI e negócio",
+          "15/03/2027"
+        ],
+        ["Matriz de perfis", "Validar permissões e separação de funções", "Área de negócio", "15/03/2027"],
+        [
+          "Base legal e encarregado",
+          "Indicar base legal, finalidade e canal do encarregado de dados",
+          "Jurídico do cliente",
+          "Antes da homologação do MVP"
+        ],
+        [
+          "Políticas do provedor de identidade",
+          "Definir administração dos realms, senha, MFA e sessão",
+          "TI do cliente",
+          "31/03/2027"
+        ],
+        [
+          "Reabertura de período",
+          "Decidir se um período fechado pode ser reaberto",
+          "Área de negócio",
+          "Antes do Incremento 1"
+        ]
+      ]
+    },
+    {
+      "type": "closing",
+      "kicker": "ENCERRAMENTO",
+      "title": "Perguntas e discussão",
+      "dates": [
+        {
+          "date": "15/03/2027",
+          "text": "Fim do refinamento: critério de aceite, matriz de perfis e medição da base atual."
+        },
+        {
+          "date": "31/03/2027",
+          "text": "Especificação da API de terceiros validada: decisão que protege a carga de dados."
+        },
+        {"date": "30/06/2027", "text": "Cobertura completa prevista na API de terceiros, base das cargas do MVP."}
+      ]
+    }
+  ]
+}

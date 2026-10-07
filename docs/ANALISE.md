@@ -1,6 +1,6 @@
 # Framework Global de Arquitetura para Claude Code — Análise e Desenho
 
-Documento para o arquiteto. Resume a análise crítica do desenho original (11 agentes) e o desenho final adotado: **7 subagentes + 17 skills** (16 skills especializadas + 1 skill de entrada). Tudo é genérico (não depende de projeto) e fica instalado em `~/.claude/`; a memória de cada projeto vive em `.architecture/` dentro do repositório dele.
+Documento para o arquiteto. Resume a análise crítica do desenho original (11 agentes) e o desenho final adotado: **7 subagentes + 19 skills** (18 skills especializadas + 1 skill de entrada). Tudo é genérico (não depende de projeto) e fica instalado em `~/.claude/`; a memória de cada projeto vive em `.architecture/` dentro do repositório dele.
 
 Rótulos de status usados em todo o framework: KNOWN, UNKNOWN, ASSUMPTION, PROPOSAL, DECISION, RISK, OPEN QUESTION; documentos DRAFT | REVIEWED | APPROVED; ADR PROPOSED | ACCEPTED | SUPERSEDED | REJECTED | DEPRECATED; radar ADOPT | TRIAL | ASSESS | HOLD | REJECT.
 
@@ -59,7 +59,7 @@ PROJETO:  .architecture/  (memória)      docs/architecture/  (documentação)
 | Componente | Quantidade | Papel |
 |---|---|---|
 | Subagentes | 7 | análise especializada, escrita nos próprios arquivos |
-| Skills | 17 | fluxo, entrevista, delegação, memória, ADR, gates |
+| Skills | 19 | fluxo, entrevista, delegação, memória, ADR, gates |
 | Templates | 30 + pasta `architecture-document/` | `~/.claude/skills/architecture/templates/` |
 | Memória por projeto | 8 arquivos + `reviews/` | `.architecture/` |
 
@@ -149,7 +149,7 @@ flowchart TD
 
 Fases em `.architecture/state.md`: `0-init`, `1-discovery`, `2-interview`, `3-requirements`, `4-proposal`, `5-validation`, `6-documentation`, `7-review`, `8-evolution`.
 
-**Onde entra o `architecture-documenter` (fase `6-documentation`).** Com a proposta validada (ADRs `ACCEPTED`) ou com o AS-IS descoberto, a skill `architecture-pdf` pergunta o escopo (atual, proposta ou ambas), aplica o gate de pergunta (identificação do sistema, stakeholders e concerns; se faltar, `architecture-interview`) e delega ao subagente a consolidação de `.architecture/` + `docs/architecture/` no documento 42010 em PDF. Ele não descobre nem decide: mapeia cada seção para a fonte, marca "A definir" onde não há fonte (e devolve a pergunta provisória), traz ADR `ACCEPTED` como "Decisão" e `PROPOSED` como "Proposta" e mantém AS-IS e TO-BE separados. O PDF pode ser regenerado após `architecture-update` e revisado por `architecture-review`. A wiki limpa e o deck do cliente são outra skill (`architecture-publish`, fora deste repositório): o documento 42010 é interno e preserva a rastreabilidade; a publicação para o cliente remove IDs e status internos.
+**Onde entra o `architecture-documenter` (fase `6-documentation`).** Com a proposta validada (ADRs `ACCEPTED`) ou com o AS-IS descoberto, a skill `architecture-pdf` pergunta o escopo (atual, proposta ou ambas), aplica o gate de pergunta (identificação do sistema, stakeholders e concerns; se faltar, `architecture-interview`) e delega ao subagente a consolidação de `.architecture/` + `docs/architecture/` no documento 42010 em PDF. Ele não descobre nem decide: mapeia cada seção para a fonte, marca "A definir" onde não há fonte (e devolve a pergunta provisória), traz ADR `ACCEPTED` como "Decisão" e `PROPOSED` como "Proposta" e mantém AS-IS e TO-BE separados. O PDF pode ser regenerado após `architecture-update` e revisado por `architecture-review`. A wiki limpa e o deck do cliente são outra skill (`architecture-publish` para a wiki e `architecture-presentation` para o deck, ambas neste repositório): o documento 42010 é interno e preserva a rastreabilidade; a publicação para o cliente remove IDs e status internos.
 
 Ordem e paralelismo em `architecture-generate`:
 

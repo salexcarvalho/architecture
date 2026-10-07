@@ -1,0 +1,31 @@
+[
+  {
+    "slug": "framework-da-api",
+    "titulo": "Linguagem e framework da API",
+    "criterios": ["Aderência às cargas em lote", "Experiência do time", "Alinhamento com o cliente", "Baixa operação", "Baixo risco"],
+    "alternativas": [
+      {"nome": "Alternativa A", "notas": [9, 9, 8, 9, 7], "escolhida": true, "situacao": "Escolhida", "marcas": []},
+      {"nome": "Alternativa B", "notas": [6, 9, 7, 5, 2], "escolhida": false, "situacao": "Descartada", "marcas": []},
+      {"nome": "Alternativa C", "notas": [6, 1, 2, 8, 5], "escolhida": false, "situacao": "Descartada", "marcas": [3]}
+    ]
+  },
+  {
+    "slug": "banco-de-dados",
+    "titulo": "Banco de dados",
+    "criterios": ["Aderência a RPO, RTO e retenção", "Experiência do time", "Alinhamento com o cliente", "Baixa operação de banco"],
+    "alternativas": [
+      {"nome": "Banco gerenciado", "notas": [9, 6, 8, 9], "escolhida": true, "situacao": "Escolhida", "marcas": []},
+      {"nome": "Banco em contêiner", "notas": [6, 9, 9, 4], "escolhida": false, "situacao": "Descartada", "marcas": []},
+      {"nome": "Banco de outro fornecedor", "notas": [6, 1, 2, 8], "escolhida": false, "situacao": "Descartada", "marcas": [1, 2]}
+    ]
+  },
+  {
+    "slug": "arquivos-especiais",
+    "titulo": "Geração de arquivos especiais",
+    "criterios": ["Fidelidade ao formato", "Funciona em Linux", "Esforço de adoção"],
+    "alternativas": [
+      {"nome": "Biblioteca X", "sufixo": "(candidata principal)", "notas": [8, 8, 6], "escolhida": true, "situacao": "Candidata", "marcas": [0, 1, 2]},
+      {"nome": "Driver ODBC", "notas": [7, 3, 4], "escolhida": false, "situacao": "Descartada", "marcas": [0, 1, 2]}
+    ]
+  }
+]

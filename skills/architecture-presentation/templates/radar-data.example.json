@@ -1,0 +1,56 @@
+[
+  {
+    "slug": "motor-de-banco",
+    "titulo": "Banco de dados: motor",
+    "criterios": ["Recursos relacionais e integridade", "Aderência à arquitetura", "Backup e recuperação", "Custo (qualitativo)", "Precedente na organização", "Desempenho"],
+    "regua_precedente": {"10 ou mais projetos": 9, "5 a 9": 7, "2 a 4": 5, "1": 4, "0": 3},
+    "nota": "Decisão do motor separada da hospedagem. Restrição do cliente tratada como filtro, nunca como nota baixa.",
+    "alternativas": [
+      {"nome": "Motor A", "escolhida": true, "situacao": "Escolhido", "notas": [9, 9, 7, 6, 9, null], "marcas": [2], "justificativas": ["Vigência por intervalo, chave estrangeira em partições e DDL transacional atendem o modelo por competência", "Mesmo motor já usado pelos serviços vizinhos da organização", "Recuperação para um ponto no tempo é recurso nativo; meta de 15 min a confirmar em ensaio", "Custo médio no serviço gerenciado", "Mais de 10 projetos com o motor no inventário", "NOT EVALUATED: sem medição de volume e latência"], "evidencias": ["P: registro da decisão (Evaluation)", "P: documento de arquitetura de aplicação, seção 1", "P: registro da decisão; D: documentação do produto (anexar)", "P: registro da decisão (linha de custo)", "I: inventário de manifests", "P: pergunta aberta sobre volume"]},
+      {"nome": "Motor B", "escolhida": false, "situacao": "Alternativa avaliada", "notas": [5, 6, 6, 7, 7, null], "marcas": [], "justificativas": ["Partições sem chave estrangeira e DDL não transacional", "Aderência ao domínio média", "Recuperação depende da hospedagem", "Custo baixo a médio", "Entre 5 e 9 projetos no inventário", "NOT EVALUATED: sem medição de volume e latência"], "evidencias": ["P: registro da decisão", "P: registro da decisão", "P: registro da decisão", "P: registro da decisão (linha de custo)", "I: inventário de manifests", "P: pergunta aberta sobre volume"]},
+      {"nome": "Motor C", "escolhida": false, "situacao": "Alternativa avaliada", "notas": [6, 5, 8, 4, 3, null], "marcas": [], "justificativas": ["Sem tipo de intervalo equivalente ao uso do modelo", "Dialeto diferente: reescrita de mapeamento e funções", "Recuperação gerenciada", "Custo médio a alto", "Nenhum projeto no inventário", "NOT EVALUATED: sem medição de volume e latência"], "evidencias": ["P: registro da decisão", "P: documento de stack, camada 3", "P: registro da decisão", "P: registro da decisão (linha de custo)", "I: inventário de manifests", "P: pergunta aberta sobre volume"]}
+    ]
+  },
+  {
+    "slug": "hospedagem-do-banco",
+    "titulo": "Banco de dados: hospedagem",
+    "criterios": ["Isolamento da aplicação", "Recuperação e atualização do motor", "Operação e custo de pessoas", "Aderência ao padrão da organização"],
+    "alternativas": [
+      {"nome": "Serviço gerenciado", "escolhida": true, "situacao": "Aprovado", "notas": [9, 8, 8, 8], "marcas": [], "justificativas": ["Banco fora da VM da aplicação: ciclo de vida e falha independentes", "Recuperação para um ponto no tempo e atualização do motor ficam com o provedor", "Menos horas de operação de banco", "Restrição declarada pelo cliente (filtro), com 2 projetos já gerenciados"], "evidencias": ["P: registro da decisão", "D: documentação do provedor (anexar)", "P: registro da decisão", "U: declaração do cliente; I: inventário"]},
+      {"nome": "Container na plataforma", "escolhida": false, "situacao": "Documentado como alternativa", "notas": [4, 5, 5, 7], "marcas": [], "justificativas": ["Compartilha host e ciclo de vida com a aplicação", "Recuperação e atualização sob responsabilidade da equipe", "Mais horas de operação de banco", "Padrão já usado em ambientes internos"], "evidencias": ["P: registro da decisão", "P: registro da decisão", "P: registro da decisão", "I: inventário"]}
+    ]
+  },
+  {
+    "slug": "filas-e-jobs",
+    "titulo": "Jobs e agendamento",
+    "criterios": ["Aderência a cargas em lote", "Reentrega e nova tentativa", "Operação e observabilidade", "Precedente na organização"],
+    "regua_precedente": {"10 ou mais projetos": 9, "5 a 9": 7, "2 a 4": 5, "1": 4, "0": 3},
+    "alternativas": [
+      {"nome": "Fila A + broker", "escolhida": true, "situacao": "Escolhida, com prova de conceito", "notas": [9, 8, 7, 4], "marcas": [1, 2], "justificativas": ["Cargas e fechamento em lote saem da requisição", "Reentrega e nova tentativa nativas", "Painel e métricas de worker disponíveis", "1 projeto no inventário (adoção planejada)"], "evidencias": ["P: registro da decisão", "D: documentação do produto (anexar)", "D: documentação do produto (anexar)", "I: inventário de manifests"]},
+      {"nome": "Fila B", "escolhida": false, "situacao": "Contingência", "notas": [7, 7, 6, 3], "marcas": [1, 2], "justificativas": ["Atende cargas em lote com menos recursos", "Reentrega com configuração manual", "Observabilidade menor", "Nenhum projeto no inventário"], "evidencias": ["P: registro da decisão", "D: documentação do produto (anexar)", "D: documentação do produto (anexar)", "I: inventário de manifests"]},
+      {"nome": "Agendador no banco", "escolhida": false, "situacao": "Alternativa avaliada", "notas": [5, 4, 5, 5], "marcas": [], "justificativas": ["Acopla job ao banco transacional", "Sem reentrega nativa", "Pouca visibilidade de execução", "2 a 4 projetos usam o padrão"], "evidencias": ["P: registro da decisão", "P: registro da decisão", "P: registro da decisão", "I: inventário de manifests"]}
+    ]
+  },
+  {
+    "slug": "autenticacao",
+    "titulo": "Autenticação",
+    "criterios": ["Login único existente", "Padrões abertos (OIDC, PKCE)", "MFA para perfis críticos", "Precedente na organização", "Capacidade interna declarada"],
+    "regua_precedente": {"10 ou mais projetos": 9, "5 a 9": 7, "2 a 4": 5, "1": 4, "0": 3},
+    "alternativas": [
+      {"nome": "Provedor do cliente", "escolhida": true, "situacao": "Escolhido", "notas": [9, 9, 8, 5, null], "marcas": [], "justificativas": ["Login único já operado pelo cliente; sem senha no sistema", "OIDC com PKCE", "MFA aplicável por perfil", "2 a 4 projetos no inventário", "NOT EVALUATED: sem declaração nem evidência para esta alternativa"], "evidencias": ["U: declaração do cliente", "D: documentação do produto (anexar)", "D: documentação do produto (anexar)", "I: inventário de manifests", "P: lacuna registrada"]},
+      {"nome": "Provedor gerenciado em nuvem", "escolhida": false, "situacao": "Alternativa avaliada", "notas": [6, 9, 9, 3, null], "marcas": [], "justificativas": ["Novo cadastro de usuários e política própria", "OIDC com PKCE", "MFA nativo", "Nenhum projeto no inventário", "NOT EVALUATED: sem declaração nem evidência para esta alternativa"], "evidencias": ["P: registro da decisão", "D: documentação do produto (anexar)", "D: documentação do produto (anexar)", "I: inventário de manifests", "P: lacuna registrada"]},
+      {"nome": "Autenticação própria", "escolhida": false, "situacao": "Alternativa avaliada", "notas": [3, 6, 4, 4, null], "marcas": [], "justificativas": ["Duplica identidade e senha", "Implementação própria de OIDC", "MFA a construir", "1 projeto no inventário", "NOT EVALUATED: sem declaração nem evidência para esta alternativa"], "evidencias": ["P: registro da decisão", "P: registro da decisão", "P: registro da decisão", "I: inventário de manifests", "P: lacuna registrada"]}
+    ]
+  },
+  {
+    "slug": "autorizacao",
+    "titulo": "Autorização",
+    "criterios": ["Perfis editáveis", "Negação por padrão", "Auditoria das decisões", "Precedente na organização"],
+    "regua_precedente": {"10 ou mais projetos": 9, "5 a 9": 7, "2 a 4": 5, "1": 4, "0": 3},
+    "alternativas": [
+      {"nome": "Perfis no banco da aplicação", "escolhida": true, "situacao": "Escolhido", "notas": [9, 9, 8, 7], "marcas": [], "justificativas": ["Perfis e escopo editáveis sem novo deploy", "Decorador de permissão em toda rota", "Trilha só de inserção das alterações", "5 a 9 projetos com o padrão"], "evidencias": ["P: registro da decisão", "P: registro da decisão", "P: registro da decisão", "I: inventário de manifests"]},
+      {"nome": "Papéis no token", "escolhida": false, "situacao": "Alternativa avaliada", "notas": [4, 7, 5, 7], "marcas": [], "justificativas": ["Mudança de perfil exige novo token", "Depende do emissor do token", "Auditoria no provedor", "5 a 9 projetos com o padrão"], "evidencias": ["P: registro da decisão", "P: registro da decisão", "P: registro da decisão", "I: inventário de manifests"]},
+      {"nome": "Motor de políticas externo", "escolhida": false, "situacao": "Alternativa avaliada", "notas": [8, 9, 7, 3], "marcas": [], "justificativas": ["Políticas editáveis", "Negação por padrão", "Log de decisões nativo", "Nenhum projeto no inventário"], "evidencias": ["D: documentação do produto (anexar)", "D: documentação do produto (anexar)", "D: documentação do produto (anexar)", "I: inventário de manifests"]}
+    ]
+  }
+]

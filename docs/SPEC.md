@@ -130,3 +130,8 @@ Pasta `~/.claude/skills/architecture/templates/` (a skill `architecture` e as de
 - Skill `architecture-pdf` (`skills/architecture-pdf/SKILL.md`): gatilhos "gerar PDF da arquitetura", "documento 42010"; gate de pergunta (identificação, stakeholders, concerns); delega e confere visualmente o PDF.
 - Template e gerador em `skills/architecture/templates/architecture-document/` (`document.md`, `print.css`, `render_pdf.py`, `render_mermaid.mjs`, `setup.sh`, `README.md` com o guia de formato). Motor: WeasyPrint; diagramas Mermaid via Chromium local; ambiente local em `~/.cache/architecture-pdf`.
 - Resultado: 7 subagentes, 17 skills.
+
+## Adendo: publicação para o cliente (wiki limpa e deck)
+
+- Skill `architecture-publish` (`skills/architecture-publish/`): wiki limpa para o cliente (3 páginas padrão com radares, regra de separação interno × cliente), `verify_wiki.py` e delegação do deck. Skill `architecture-presentation` (`skills/architecture-presentation/`): deck em 2 fases (REVISÃO e PRODUÇÃO), build HTML/PDF/PPTX e `verify_deck.py`. Ambas já existiam só em `~/.claude/skills` e foram trazidas para o repositório (com `assets/`, `scripts/`, `templates/` e fontes `.woff2`); `install.sh` copia as pastas inteiras.
+- Resultado: 7 subagentes, 19 skills (1 de entrada + 18 especializadas).

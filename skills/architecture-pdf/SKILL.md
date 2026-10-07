@@ -10,7 +10,7 @@ Coordenação, gate de pergunta e conferência rodam na SESSÃO PRINCIPAL (esta 
 ## Quando usar
 - Fase `6-documentation` (ver skill `architecture`), com a arquitetura validada, ou pedido direto do documento formal em PDF.
 - Atualizar o PDF depois de `architecture-update` ou de mudança de ADRs.
-- Não usar: para gerar o TO-BE (`architecture-generate`), para decidir (`architecture-adr`, `architecture-tech-evaluation`) ou para a wiki/apresentação do cliente (skill `architecture-publish`, mantida à parte e fora deste repositório: documento interno 42010 e wiki limpa têm regras de separação diferentes).
+- Não usar: para gerar o TO-BE (`architecture-generate`), para decidir (`architecture-adr`, `architecture-tech-evaluation`) ou para a wiki/apresentação do cliente (skills `architecture-publish` e `architecture-presentation`: documento interno 42010 e wiki limpa têm regras de separação diferentes).
 
 ## Pré-condições
 1. Ler `.architecture/state.md`. Se não existir: orientar `architecture-start` e parar. Ler `context.md`, `decisions.md`, `open-questions.md` e `docs/architecture/README.md`.

@@ -1,0 +1,193 @@
+{
+  "output": "<sistema>-arquitetura-resumo.pptx",
+  "theme": {},
+  "slides": [
+    {
+      "type": "cover",
+      "topo": "<SISTEMA> · ARQUITETURA · VISÃO RESUMIDA",
+      "titulo": "Arquitetura do <SISTEMA>",
+      "subtitulo": "Como o sistema será construído, onde ele roda, como os dados ficam protegidos e o que precisamos decidir juntos com <o cliente>.",
+      "meta": "<CLIENTE> · <SISTEMA> · dd/mm/aaaa"
+    },
+    {
+      "type": "bullets",
+      "kicker": "O PROBLEMA",
+      "titulo": "<Afirmação: o processo atual depende de X e isso limita Y>",
+      "itens": [
+        ["<Fato 1 do processo atual>", "<Consequência em linguagem de negócio, até ~2 linhas.>"],
+        ["<Fato 2>", "<Consequência.>"],
+        ["<Fato 3: prazo ou volume>", "<Consequência.>"],
+        ["<Fato 4: dependência de fontes ou pessoas>", "<Consequência.>"]
+      ],
+      "nota": "<Frase-síntese: o <SISTEMA> resolve isto com ...>"
+    },
+    {
+      "type": "diagram",
+      "kicker": "VISÃO GERAL",
+      "titulo": "<Afirmação: uma aplicação web, um banco e as fontes como entrada>",
+      "boxes": [
+        {"id": "usr", "x": 0.9, "y": 3.7, "w": 1.9, "h": 1.0, "titulo": "Usuários", "sub": "Navegador", "tom": "plain"},
+        {"id": "spa", "x": 3.4, "y": 3.7, "w": 1.9, "h": 1.0, "titulo": "Interface web", "sub": "<tecnologia>", "tom": "accent"},
+        {"id": "idp", "x": 3.4, "y": 2.25, "w": 1.9, "h": 0.85, "titulo": "Identidade", "sub": "Login único + MFA", "tom": "warn"},
+        {"id": "grp1", "x": 5.9, "y": 2.25, "w": 2.6, "h": 3.55, "grupo": "<SISTEMA> · UMA IMAGEM"},
+        {"id": "api", "x": 6.15, "y": 2.95, "w": 2.1, "h": 1.0, "titulo": "API", "sub": "<tecnologia> · regras e permissões", "tom": "accent"},
+        {"id": "wrk", "x": 6.15, "y": 4.4, "w": 2.1, "h": 1.0, "titulo": "Worker", "sub": "<tecnologia> · tarefas em lote", "tom": "accent"},
+        {"id": "grp2", "x": 9.1, "y": 2.25, "w": 3.3, "h": 3.55, "grupo": "DADOS"},
+        {"id": "db", "x": 9.3, "y": 2.75, "w": 2.9, "h": 0.8, "titulo": "Banco de dados", "sub": "<motor>, rede privada", "tom": "ok"},
+        {"id": "fila", "x": 9.3, "y": 3.7, "w": 2.9, "h": 0.8, "titulo": "Fila e cache", "sub": "<tecnologia>", "tom": "ok"},
+        {"id": "blob", "x": 9.3, "y": 4.65, "w": 2.9, "h": 0.8, "titulo": "Armazenamento de arquivos", "sub": "Arquivos e cópias de segurança", "tom": "ok"},
+        {"id": "ext", "x": 5.9, "y": 6.15, "w": 6.5, "h": 0.7, "titulo": "<Fonte externa de dados>", "sub": "<o que ela fornece>", "tom": "ok"}
+      ],
+      "arrows": [
+        {"x1": 2.8, "y1": 4.2, "x2": 3.4, "y2": 4.2},
+        {"x1": 5.3, "y1": 4.2, "x2": 5.9, "y2": 4.2},
+        {"x1": 4.35, "y1": 3.7, "x2": 4.35, "y2": 3.1, "label": "login", "lx": 4.5, "ly": 3.3, "lw": 0.9},
+        {"x1": 5.3, "y1": 2.67, "x2": 5.9, "y2": 2.67},
+        {"x1": 8.5, "y1": 4.05, "x2": 9.1, "y2": 4.05},
+        {"x1": 7.2, "y1": 6.15, "x2": 7.2, "y2": 5.8, "label": "importa dados", "lx": 7.35, "ly": 5.86, "lw": 2.4}
+      ],
+      "textos": [
+        {"x": 0.9, "y": 5.35, "w": 4.4, "h": 1.2, "size": 13,
+         "texto": "<Uma frase que explique o diagrama em linguagem simples.>"}
+      ]
+    },
+    {
+      "type": "cards",
+      "kicker": "OS PILARES",
+      "titulo": "<Quatro pilares sustentam a arquitetura>",
+      "cols": 2,
+      "itens": [
+        ["1 · <PILAR>", "<Uma ou duas frases: o que garante e por quê.>", "ok"],
+        ["2 · <PILAR>", "<Frase.>", "accent"],
+        ["3 · <PILAR>", "<Frase.>", "accent"],
+        ["4 · <PILAR>", "<Frase.>", "ok"]
+      ]
+    },
+    {
+      "type": "table",
+      "kicker": "TECNOLOGIAS ESCOLHIDAS",
+      "titulo": "<Afirmação: a stack reaproveita o que o time e o cliente já dominam>",
+      "cols": ["Camada", "Escolha", "Alternativa descartada"],
+      "rows": [
+        ["<Aplicação (API)>", "<escolha>", "<alternativas>"],
+        ["<Processamento em lote>", "<escolha>", "<alternativas>"],
+        ["<Banco de dados>", "<escolha>", "<alternativas>"],
+        ["<Interface>", "<escolha>", "<alternativas>"],
+        ["<Identidade>", "<escolha>", "<alternativas>"],
+        ["<Hospedagem>", "<escolha>", "<alternativas>"]
+      ],
+      "widths": [1.5, 2.6, 2.8],
+      "nota": "<Frase de status: as decisões de arquitetura foram aprovadas em dd/mm/aaaa.>"
+    },
+    {
+      "type": "table",
+      "kicker": "DECISÃO-CHAVE · <TEMA>",
+      "titulo": "<Afirmação: a escolha mais importante e o ganho principal>",
+      "cols": ["Critério", "<Escolhida> (escolhida)", "<Alternativa 2>", "<Alternativa 3>"],
+      "rows": [
+        ["<Critério 1>", "<avaliação>", "<avaliação>", "<avaliação>"],
+        ["<Critério 2>", "<avaliação>", "<avaliação>", "<avaliação>"],
+        ["<Critério 3>", "<avaliação>", "<avaliação>", "<avaliação>"],
+        ["<Risco principal>", "<risco>", "<risco>", "<risco>"]
+      ],
+      "widths": [1.7, 2.2, 2.0, 2.0],
+      "fs": 12
+    },
+    {
+      "type": "table",
+      "kicker": "OS COMPONENTES",
+      "titulo": "<Afirmação: N componentes, cada um com uma função clara>",
+      "cols": ["Componente", "O que faz", "Onde fica"],
+      "rows": [
+        ["Interface web", "<função>", "<local>"],
+        ["API", "<função>", "<local>"],
+        ["Worker", "<função>", "<local>"],
+        ["Banco de dados", "<função>", "<local>"],
+        ["Fila e cache", "<função>", "<local>"],
+        ["Armazenamento de arquivos", "<função>", "<local>"],
+        ["Identidade", "<função>", "<local>"]
+      ],
+      "widths": [1.5, 3.2, 2.2],
+      "fs": 12.5
+    },
+    {
+      "type": "flow",
+      "kicker": "DADOS E <CONCEITO CENTRAL>",
+      "titulo": "<Afirmação sobre o ciclo de vida dos dados>",
+      "passos": [
+        ["<Estado 1>", "<legenda curta>"],
+        ["<Estado 2>", "<legenda>"],
+        ["<Estado 3>", "<legenda>"],
+        ["<Estado final>", "<legenda>"]
+      ],
+      "cards": [
+        ["<REGRA 1>", "<Frase.>", "accent"],
+        ["<REGRA 2>", "<Frase.>", "ok"],
+        ["<REGRA 3>", "<Frase.>", "accent"]
+      ]
+    },
+    {
+      "type": "cards",
+      "kicker": "SEGURANÇA E ACESSO",
+      "titulo": "<Afirmação: acesso único, perfis definidos e tudo auditado>",
+      "cols": 3,
+      "itens": [
+        ["LOGIN ÚNICO", "<Frase.>", "accent"],
+        ["SEGUNDO FATOR", "<Frase.>", "ok"],
+        ["PERFIS NO SISTEMA", "<Frase.>", "accent"],
+        ["AUDITORIA", "<Frase.>", "ok"],
+        ["DADOS PESSOAIS", "<Frase.>", "accent"],
+        ["EXPOSIÇÃO NA INTERNET", "<Frase; use o tom warn quando houver ressalva.>", "warn"]
+      ]
+    },
+    {
+      "type": "cards",
+      "kicker": "INFRAESTRUTURA E OPERAÇÃO",
+      "titulo": "<Afirmação: infraestrutura dedicada, em rede privada, com recuperação ensaiada>",
+      "cols": 3,
+      "itens": [
+        ["AMBIENTES", "<Frase.>", "accent"],
+        ["ENTREGA", "<Frase.>", "ok"],
+        ["DISPONIBILIDADE", "<Frase com metas em linguagem simples.>", "accent"],
+        ["BACKUP E RECUPERAÇÃO", "<Frase.>", "ok"],
+        ["OBSERVABILIDADE", "<Frase.>", "accent"],
+        ["PONTOS EM ABERTO", "<Frase.>", "warn"]
+      ]
+    },
+    {
+      "type": "table",
+      "kicker": "ROADMAP",
+      "titulo": "<Afirmação: o MVP chega em dd/mm/aaaa e o restante até dd/mm/aaaa>",
+      "cols": ["Etapa", "Período", "O que entrega"],
+      "rows": [
+        ["Refinamento", "dd/mm a dd/mm/aaaa", "<entrega>"],
+        ["MVP", "dd/mm/aaaa a dd/mm/aaaa", "<entrega>"],
+        ["Incremento 1", "dd/mm/aaaa a dd/mm/aaaa", "<entrega>"],
+        ["Incremento 2", "dd/mm/aaaa a dd/mm/aaaa", "<entrega>"]
+      ],
+      "widths": [1.4, 2.2, 3.6]
+    },
+    {
+      "type": "table",
+      "kicker": "PONTOS A DEFINIR COM <O CLIENTE>",
+      "titulo": "<N decisões de negócio dependem de <o cliente>>",
+      "cols": ["Ponto", "Por que importa", "Quem decide"],
+      "rows": [
+        ["<Ponto 1>", "<impacto>", "<papel ou área>"],
+        ["<Ponto 2>", "<impacto>", "<papel ou área>"],
+        ["<Ponto 3>", "<impacto>", "<papel ou área>"]
+      ],
+      "widths": [2.4, 3.2, 1.6]
+    },
+    {
+      "type": "closing",
+      "titulo": "O que pedimos a <o cliente>",
+      "itens": [
+        ["<Pedido 1, acionável>", "Dono: <papel ou área> · Prazo proposto: dd/mm/aaaa"],
+        ["<Pedido 2>", "Dono: <papel ou área> · Prazo proposto: dd/mm/aaaa"],
+        ["<Pedido 3>", "Dono: <papel ou área> · Prazo proposto: dd/mm/aaaa"]
+      ],
+      "rodape": "Prazos propostos, ajustáveis na reunião · <CLIENTE> · <SISTEMA> · dd/mm/aaaa"
+    }
+  ]
+}
