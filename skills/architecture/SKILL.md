@@ -48,6 +48,8 @@ README.md                                   (índice; skills que criam/alteram d
 
 Projeções: `01-context/assumptions.md` e `02-requirements/open-questions.md` espelham `.architecture/assumptions.md` e `.architecture/open-questions.md` (mesmos IDs; a memória prevalece). Lacunas do discovery NÃO têm arquivo em `03-as-is/`: vão para `.architecture/open-questions.md` (Q-NNN) e `.architecture/assumptions.md` (A-NNN). Riscos (inclusive de segurança) vão para `.architecture/risks.md` (R-NNN).
 
+**Separação wiki limpa × documentação interna (regra do usuário).** A wiki do cliente é a versão LIMPA: sem IDs (F/A/Q/R/P/RF/RNF/RES/TD/ADR/DEC), sem PROPOSAL/DECISION, sem páginas de decisões, riscos ou perguntas; pendências do cliente em linguagem simples. ADRs, decisões, riscos, perguntas e pauta de refinamento ficam SÓ no repositório do sistema (`docs/architecture` + `.architecture`). Publicação, 3 páginas padrão, radar e deck: skill `architecture-publish`.
+
 **IDs.** Memória: `F-NNN` fatos, `A-NNN` hipóteses, `Q-NNN` perguntas, `P-NNN` propostas, `R-NNN` riscos, `ADR-NNN` decisões. Locais a um documento (numeração própria, escrita pelo autor do documento): `RNF-NNN`, `RF-NNN`, `RES-NNN` (requisitos e restrições), `G-NNN`/`TD-NNN` (lacunas e dívida técnica do roadmap), `RV-NNN` (achados do reviewer).
 
 **IDs provisórios e renumeração (obrigatório).** Subagentes não escrevem em `decisions.md`, `open-questions.md`, `assumptions.md` nem `risks.md` e não conhecem a numeração final: item novo é escrito como `<TIPO>-novo-<n>` (`F-novo-1`, `A-novo-1`, `Q-novo-1`, `P-novo-1`, `R-novo-1`; `n` sequencial por tipo dentro da execução) nos documentos e no relatório. Exceção: `architecture-discovery` é dono da seção discovery de `known-facts.md` e atribui `F-NNN` finais (continuando do maior existente; em delegações paralelas a skill informa faixas disjuntas). A skill que delegou, ao reconciliar o retorno, DEVE: (1) ler o maior ID de cada tipo na memória; (2) atribuir IDs finais na ordem do relatório, sem reutilizar; (3) registrar o item no arquivo de memória do tipo; (4) substituir TODAS as ocorrências `X-novo-n` nos documentos que aquele subagente escreveu, arquivo por arquivo (`grep -rn 'novo-' docs/architecture`; Edit/sed), pois o mesmo `P-novo-1` pode existir em retornos de subagentes diferentes; (5) conferir que `grep -rn 'novo-' docs/architecture .architecture` retorna 0 antes de encerrar a etapa. O reviewer aponta qualquer `-novo-` restante.
@@ -84,10 +86,11 @@ DESCOBRIR → LER → CONHECIDO → LACUNAS → PERGUNTAR → REGISTRAR → ALTE
 | `3-requirements` | RNFs/restrições sem métrica/fonte | `architecture-context`, depois `architecture-interview` se faltar item |
 | `4-proposal` | requisitos prontos, TO-BE ausente | `architecture-generate` (ou `architecture-api/data/infrastructure/devops/security` para parte) |
 | `5-validation` | proposta pronta, sem aprovação | apresentar ao usuário; `architecture-adr` para registrar aprovações |
-| `6-documentation` | aprovado, docs a consolidar | `architecture-generate` (consolidação), `architecture-gap-analysis`; documento formal em PDF (42010): `architecture-pdf` |
+| `6-documentation` | aprovado, docs a consolidar | `architecture-generate` (consolidação), `architecture-gap-analysis`; publicação para o cliente (wiki limpa + 3 páginas padrão + deck): `architecture-publish`; documento formal em PDF (42010): `architecture-pdf` |
 | `7-review` | docs prontos | `architecture-review` |
 | `8-evolution` | doc viva | `architecture-update` |
 | qualquer | escolha de tecnologia | `architecture-tech-evaluation` |
+| qualquer | publicar na wiki, documentação para o cliente, apresentação/versão resumida, gráficos radar | `architecture-publish` |
 | qualquer | "gerar PDF da arquitetura", "documento de arquitetura de software", "documento 42010" | `architecture-pdf` (escopo: atual, proposta ou ambas; saída em `docs/arquitetura/`, fora da árvore fixa) |
 
 ## FLUXO COMPLETO ("Vamos construir a arquitetura inicial deste projeto")
@@ -101,7 +104,8 @@ Executar em ordem, atualizando `state.md` a cada etapa. **PARAR e aguardar o usu
 5. **validate + adr** — `architecture-adr`: com a aprovação registrada (data + resposta), promover ADRs a ACCEPTED com Evidence; os não aprovados ficam PROPOSED ou REJECTED. Itens PROPOSAL aprovados viram `[DECISION · ADR-NNN]`.
 6. **review** — `architecture-review`: revisão independente. ⏸ *Validação 5:* mostrar achados CRÍTICO/ALTO; usuário decide corrigir ou aceitar como risco (registrar).
 7. **gap-analysis** — `architecture-gap-analysis`: AS-IS × TO-BE → roadmap + dívida técnica. ⏸ *Validação final:* usuário revisa o roadmap.
-8. Fechar: `state.md` com fase `8-evolution`, último commit revisado e próximos passos; atualizar `docs/architecture/README.md`.
+8. **publish** (quando o usuário pedir documentação para o cliente / ao consolidar a fase `6-documentation`) — `architecture-publish`: wiki limpa + 3 páginas padrão com radar + deck resumido; push só com pedido. Documento formal em PDF: `architecture-pdf`.
+9. Fechar: `state.md` com fase `8-evolution`, último commit revisado e próximos passos; atualizar `docs/architecture/README.md`.
 
 Se o usuário interromper, registrar o ponto exato em `state.md` ("Próximos passos") para retomada.
 
