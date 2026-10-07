@@ -1,6 +1,6 @@
 # Framework Global de Arquitetura para Claude Code — Análise e Desenho
 
-Documento para o arquiteto. Resume a análise crítica do desenho original (11 agentes) e o desenho final adotado: **6 subagentes + 16 skills** (15 skills especializadas + 1 skill de entrada). Tudo é genérico (não depende de projeto) e fica instalado em `~/.claude/`; a memória de cada projeto vive em `.architecture/` dentro do repositório dele.
+Documento para o arquiteto. Resume a análise crítica do desenho original (11 agentes) e o desenho final adotado: **7 subagentes + 17 skills** (16 skills especializadas + 1 skill de entrada). Tudo é genérico (não depende de projeto) e fica instalado em `~/.claude/`; a memória de cada projeto vive em `.architecture/` dentro do repositório dele.
 
 Rótulos de status usados em todo o framework: KNOWN, UNKNOWN, ASSUMPTION, PROPOSAL, DECISION, RISK, OPEN QUESTION; documentos DRAFT | REVIEWED | APPROVED; ADR PROPOSED | ACCEPTED | SUPERSEDED | REJECTED | DEPRECATED; radar ADOPT | TRIAL | ASSESS | HOLD | REJECT.
 
@@ -45,12 +45,12 @@ Problemas de qualidade do desenho original:
 SESSÃO PRINCIPAL (skills — falam com o usuário, decidem o fluxo, delegam)
   architecture (entrada) ─ start · context · discover · interview · generate
                            api · data · infrastructure · devops · security
-                           adr · tech-evaluation · review · gap-analysis · update
+                           adr · tech-evaluation · review · gap-analysis · update · pdf
         │ delega (somente a sessão principal)
         ▼
 SUBAGENTES (analisam e PROPÕEM; retornam relatório ≤ 40 linhas; não falam com o usuário)
   architecture-discovery · application-architect · data-architect
-  platform-architect · security-privacy-architect · architecture-reviewer
+  platform-architect · security-privacy-architect · architecture-reviewer · architecture-documenter
         │ escrevem
         ▼
 PROJETO:  .architecture/  (memória)      docs/architecture/  (documentação)
@@ -58,9 +58,9 @@ PROJETO:  .architecture/  (memória)      docs/architecture/  (documentação)
 
 | Componente | Quantidade | Papel |
 |---|---|---|
-| Subagentes | 6 | análise especializada, escrita nos próprios arquivos |
-| Skills | 16 | fluxo, entrevista, delegação, memória, ADR, gates |
-| Templates | 30 | `~/.claude/skills/architecture/templates/` |
+| Subagentes | 7 | análise especializada, escrita nos próprios arquivos |
+| Skills | 17 | fluxo, entrevista, delegação, memória, ADR, gates |
+| Templates | 30 + pasta `architecture-document/` | `~/.claude/skills/architecture/templates/` |
 | Memória por projeto | 8 arquivos + `reviews/` | `.architecture/` |
 
 ## 4. Responsabilidades sem sobreposição
@@ -73,6 +73,7 @@ PROJETO:  .architecture/  (memória)      docs/architecture/  (documentação)
 | `platform-architect` | `04-to-be/{infrastructure,observability,deployment}.md`, `05-diagrams/deployment.md`, `09-operations/{environments,observability,backup-restore,disaster-recovery,runbooks}.md` | Docker, CI/CD, IaC, ambientes (só nomes de variáveis) | introduzir complexidade sem justificativa; ler valores de segredos |
 | `security-privacy-architect` | `04-to-be/security.md`, `08-security/{threat-model,privacy-lgpd,security-baseline}.md` (riscos → `.architecture/risks.md` via relatório) | tudo | expor segredos; afirmar conformidade sem evidência |
 | `architecture-reviewer` | `.architecture/reviews/REVIEW-<AAAA-MM-DD>.md` | tudo | editar documentos revisados (só aponta) |
+| `architecture-documenter` | `docs/arquitetura/<título>.{md,pdf}` (fora da árvore fixa de `docs/architecture/`) | memória, `docs/architecture/**`, ADRs, repositório | descobrir, propor ou decidir; escrever em `docs/architecture/`, `.architecture/` ou `06-decisions/`; promover proposta a decisão |
 
 Regras comuns: todos retornam (a) o que escreveram, (b) itens de memória com Status e Source, (c) até 7 perguntas sugeridas por impacto, (d) ADRs propostos. Nenhum escreve em `06-decisions/` (só a skill `architecture-adr`) nem marca ACCEPTED. Exceção: no modo avaliação de tecnologia (acionado por `architecture-tech-evaluation`) o especialista escreve `07-technology/evaluations/<tecnologia>.md`.
 
@@ -93,6 +94,7 @@ Regras comuns: todos retornam (a) o que escreveram, (b) itens de memória com St
 | `architecture-infrastructure`, `architecture-devops` | `platform-architect` |
 | `architecture-security` | `security-privacy-architect` |
 | `architecture-review` | `architecture-reviewer` |
+| `architecture-pdf` | `architecture-documenter` |
 | `architecture-generate` | application + data + platform (paralelo) → security → reviewer |
 | `architecture-update` | especialista do domínio afetado + reviewer |
 | `architecture-tech-evaluation` | especialista do domínio (opcional) |
@@ -107,6 +109,7 @@ Regras comuns: todos retornam (a) o que escreveram, (b) itens de memória com St
 | `platform-architect` | `architecture-infrastructure`, `architecture-devops`, `architecture-generate`, `architecture-update`, `architecture-tech-evaluation` |
 | `security-privacy-architect` | `architecture-security`, `architecture-generate`, `architecture-update`, `architecture-tech-evaluation` |
 | `architecture-reviewer` | `architecture-review` (chamada por `architecture-generate` e `architecture-update`) |
+| `architecture-documenter` | `architecture-pdf` |
 
 ## 7. Fluxo de execução
 
@@ -145,6 +148,8 @@ flowchart TD
 ```
 
 Fases em `.architecture/state.md`: `0-init`, `1-discovery`, `2-interview`, `3-requirements`, `4-proposal`, `5-validation`, `6-documentation`, `7-review`, `8-evolution`.
+
+**Onde entra o `architecture-documenter` (fase `6-documentation`).** Com a proposta validada (ADRs `ACCEPTED`) ou com o AS-IS descoberto, a skill `architecture-pdf` pergunta o escopo (atual, proposta ou ambas), aplica o gate de pergunta (identificação do sistema, stakeholders e concerns; se faltar, `architecture-interview`) e delega ao subagente a consolidação de `.architecture/` + `docs/architecture/` no documento 42010 em PDF. Ele não descobre nem decide: mapeia cada seção para a fonte, marca "A definir" onde não há fonte (e devolve a pergunta provisória), traz ADR `ACCEPTED` como "Decisão" e `PROPOSED` como "Proposta" e mantém AS-IS e TO-BE separados. O PDF pode ser regenerado após `architecture-update` e revisado por `architecture-review`. A wiki limpa e o deck do cliente são outra skill (`architecture-publish`, fora deste repositório): o documento 42010 é interno e preserva a rastreabilidade; a publicação para o cliente remove IDs e status internos.
 
 Ordem e paralelismo em `architecture-generate`:
 

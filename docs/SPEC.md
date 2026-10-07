@@ -123,3 +123,10 @@ Pasta `~/.claude/skills/architecture/templates/` (a skill `architecture` e as de
 - Skills: `~/.claude/skills/<nome>/SKILL.md` com frontmatter `name`, `description` (gatilhos em PT e EN, ex.: "Vamos construir a arquitetura inicial deste projeto", "arquitetura", "architecture"). Corpo: Quando usar, Pré-condições (ler `.architecture/state.md`), Passos, Delegação (prompt-base para o subagente, com contexto mínimo: caminhos, fase, itens de memória relevantes), Gate de pergunta, Saída, Critério de conclusão, Atualização de state.md.
 - A skill `architecture` deve tratar a frase "Vamos construir a arquitetura inicial deste projeto" como gatilho para iniciar o fluxo completo (start → interview → requirements → generate → validate → adr → review → gap-analysis), parando para o usuário em cada ponto de validação.
 - Instalação: tudo gerado primeiro em STAGING `arch-framework/staging/{agents,skills}/` (scratchpad da sessão) espelhando `~/.claude/{agents,skills}`, mais `install.sh` (cópia idempotente, com backup do que existir com o mesmo nome) — o usuário aprova antes de instalar.
+
+## Adendo: documento de arquitetura em PDF (42010)
+
+- Subagente `architecture-documenter` (`agents/architecture-documenter.md`): consolida memória, `docs/architecture/`, ADRs e repositório no documento ISO/IEC/IEEE 42010 e gera o PDF. Escreve só `docs/arquitetura/<título>.{md,pdf}`. Não descobre, não propõe, não decide; sem fonte = "A definir" + pergunta provisória; ADR ACCEPTED = Decisão, PROPOSED = Proposta; AS-IS × TO-BE separados.
+- Skill `architecture-pdf` (`skills/architecture-pdf/SKILL.md`): gatilhos "gerar PDF da arquitetura", "documento 42010"; gate de pergunta (identificação, stakeholders, concerns); delega e confere visualmente o PDF.
+- Template e gerador em `skills/architecture/templates/architecture-document/` (`document.md`, `print.css`, `render_pdf.py`, `render_mermaid.mjs`, `setup.sh`, `README.md` com o guia de formato). Motor: WeasyPrint; diagramas Mermaid via Chromium local; ambiente local em `~/.cache/architecture-pdf`.
+- Resultado: 7 subagentes, 17 skills.

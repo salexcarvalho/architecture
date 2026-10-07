@@ -5,7 +5,7 @@ description: Ponto de entrada do framework de arquitetura. Lê .architecture/sta
 
 # architecture — ponto de entrada e coordenação
 
-Coordenação e entrevista rodam na SESSÃO PRINCIPAL (esta skill). Subagentes (`architecture-discovery`, `application-architect`, `data-architect`, `platform-architect`, `security-privacy-architect`, `architecture-reviewer`) analisam e PROPÕEM; não falam com o usuário, não decidem e não disparam outros subagentes. Só a sessão principal delega.
+Coordenação e entrevista rodam na SESSÃO PRINCIPAL (esta skill). Subagentes (`architecture-discovery`, `application-architect`, `data-architect`, `platform-architect`, `security-privacy-architect`, `architecture-reviewer`) analisam e PROPÕEM; `architecture-documenter` apenas CONSOLIDA em documento o que já está verificado; nenhum fala com o usuário, nenhum decide e não disparam outros subagentes. Só a sessão principal delega.
 
 ## Quando usar
 - O usuário pede para construir, continuar, revisar ou consultar o estado da arquitetura de um projeto.
@@ -84,10 +84,11 @@ DESCOBRIR → LER → CONHECIDO → LACUNAS → PERGUNTAR → REGISTRAR → ALTE
 | `3-requirements` | RNFs/restrições sem métrica/fonte | `architecture-context`, depois `architecture-interview` se faltar item |
 | `4-proposal` | requisitos prontos, TO-BE ausente | `architecture-generate` (ou `architecture-api/data/infrastructure/devops/security` para parte) |
 | `5-validation` | proposta pronta, sem aprovação | apresentar ao usuário; `architecture-adr` para registrar aprovações |
-| `6-documentation` | aprovado, docs a consolidar | `architecture-generate` (consolidação), `architecture-gap-analysis` |
+| `6-documentation` | aprovado, docs a consolidar | `architecture-generate` (consolidação), `architecture-gap-analysis`; documento formal em PDF (42010): `architecture-pdf` |
 | `7-review` | docs prontos | `architecture-review` |
 | `8-evolution` | doc viva | `architecture-update` |
 | qualquer | escolha de tecnologia | `architecture-tech-evaluation` |
+| qualquer | "gerar PDF da arquitetura", "documento de arquitetura de software", "documento 42010" | `architecture-pdf` (escopo: atual, proposta ou ambas; saída em `docs/arquitetura/`, fora da árvore fixa) |
 
 ## FLUXO COMPLETO ("Vamos construir a arquitetura inicial deste projeto")
 
